@@ -1,1 +1,1 @@
-# Parameterized ALU Design and Verification
+# Parameterized ALU Design and Verification using Verilog
