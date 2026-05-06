@@ -29,7 +29,7 @@ reg                 g, l, e;
 reg                 err;                                           
 reg                 C;
 reg [1:0]           IV;                       
-reg [W-1:0]         A, B;                                   
+reg [W-1:0]         A, B, Am, Bm;                                   
 reg signed [W-1:0]  SA, SB;
 
 reg mul_done;
@@ -43,12 +43,16 @@ always @(posedge CLK or posedge RST) begin
         ERR         <= 0;
         A           <= 0;
         B           <= 0;
+        Am          <= 0;
+        Bm          <= 0;
         C           <= 0;
         SA          <= 0;
         SB          <= 0;
     end else begin
       	A           <= OPA;
         B           <= OPB;
+        Am          <= (CMD == 4'd9 || CMD == 4'd10) ? A : 0;
+        Bm          <= (CMD == 4'd9 || CMD == 4'd10) ? B : 0;
         C           <= CIN;
         IV          <= INP_VALID;
         SA          <= OPA;
@@ -107,11 +111,11 @@ always @(*) begin
                 {g, l, e, err}  = (IV == 2'b11) ? {A > B, A < B, A == B, 1'b0} : 1;
             end
             9: begin
-                {res[W:0], err} = (IV == 2'b11) ? {(A + 1'b1) * (B + 1'b1), 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {(Am + 1'b1) * (Bm + 1'b1), 1'b0} : 1;
                 cout = res[W];
             end
             10: begin
-                {res[W:0], err} = (IV == 2'b11) ? {(A << 1'b1) * B, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {(Am << 1'b1) * Bm, 1'b0} : 1;
                 cout = res[W];
             end
             11: begin

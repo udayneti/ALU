@@ -45,7 +45,6 @@ module tb;
         // OPB = $urandom();
         CMD = i;
         CIN = 1;
-        @(posedge CLK);
         if(i == 9) begin
             OPA = 4;
             OPB = 5;
@@ -55,6 +54,8 @@ module tb;
           OPA = 10;
           OPB = 3;
           @(posedge CLK);
+          @(posedge CLK);
+        end else begin
           @(posedge CLK);
         end
     end
