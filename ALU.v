@@ -72,41 +72,52 @@ always @(*) begin
   if(MODE) begin
         case(CMD)
             0: begin
-                {cout, res[W-1:0], err} = (IV == 2'b11) ? {A + B, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {A + B, 1'b0} : 1;
+                cout = res[W];
             end
             1: begin
-                {cout, res[W-1:0], err} = (IV == 2'b11) ? {A - B, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {A - B, 1'b0} : 1;
+                cout = res[W];
             end
             2: begin
-                {cout, res[W-1:0], err} = (IV == 2'b11) ? {A + B + C, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {A + B + C, 1'b0} : 1;
+                cout = res[W];
             end
             3: begin
-                {cout, res[W-1:0], err} = (IV == 2'b11) ? {A - B - C, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {A - B - C, 1'b0} : 1;
+                cout = res[W];
             end
             4: begin
-                {cout, res[W-1:0], err} = (IV[0] == 1'b1) ? {A + 1'b1, 1'b0} : 1;
+                {res[W:0], err} = (IV[0] == 1'b1) ? {A + 1'b1, 1'b0} : 1;
+                cout = res[W];
             end
             5: begin
-                {cout, res[W-1:0], err} = (IV[0] == 1'b1) ? {A - 1'b1, 1'b0} : 1;
+                {res[W:0], err} = (IV[0] == 1'b1) ? {A - 1'b1, 1'b0} : 1;
+                cout = res[W];
             end
             6: begin
-                {cout, res[W-1:0], err} = (IV[1] == 1'b1) ? {B + 1'b1, 1'b0} : 1;
+                {res[W:0], err} = (IV[1] == 1'b1) ? {B + 1'b1, 1'b0} : 1;
+                cout = res[W];
             end
             7: begin
-                {cout, res[W-1:0], err} = (IV[1] == 1'b1) ? {B - 1'b1, 1'b0} : 1;
+                {res[W:0], err} = (IV[1] == 1'b1) ? {B - 1'b1, 1'b0} : 1;
+                cout = res[W];
             end
             8: begin
                 {g, l, e, err}  = (IV == 2'b11) ? {A > B, A < B, A == B, 1'b0} : 1;
             end
             9: begin
-                {cout, res, err} = (IV == 2'b11) ? {(A + 1'b1) * (B + 1'b1), 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {(A + 1'b1) * (B + 1'b1), 1'b0} : 1;
+                cout = res[W];
             end
             10: begin
-                {cout, res, err} = (IV == 2'b11) ? {(A << 1'b1) * B, 1'b0} : 1;
+                {res[W:0], err} = (IV == 2'b11) ? {(A << 1'b1) * B, 1'b0} : 1;
+                cout = res[W];
             end
             11: begin
                 if(IV == 2'b11) begin
-                    {cout, res[W-1:0]} = SA + SB;
+                    res[W:0] = SA + SB;
+                    cout = res[W];
                     {g, l, e}  = {SA > SB, SA < SB, SA == SB};
                     oflow = (~SA[W-1] & ~SB[W-1] & res[W-1]) | (SA[W-1] & SA[W-1] & ~res[W-1]);
                 end else begin
@@ -115,7 +126,8 @@ always @(*) begin
             end
             12: begin
                 if(IV == 2'b11) begin
-                  {cout, res[W-1:0]} = SA - SB;
+                  res[W:0] = SA - SB;
+                  cout = res[W];
                   {g, l, e} = {SA > SB, SA < SB, SA == SB};
                   oflow = (SA[W-1] ^ SB[W-1]) & (res[W-1] ^ SA[W-1]);
                 end else begin
